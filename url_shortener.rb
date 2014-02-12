@@ -12,14 +12,16 @@ class UrlShortener < Sinatra::Application
   post '/shortened_url' do
     url_to_shorten = params['url_to_shorten']
 
-    if is_url?(url_to_shorten)
+    if url_to_shorten.empty?
+      erb :index, locals:{error: 'URL can not be blank', url_to_shorten: url_to_shorten}
+    elsif !is_url?(url_to_shorten)
+      erb :index, locals:{error: 'The text you entered is not a valid URL', url_to_shorten: url_to_shorten}
+    else
       max_id = settings.urls.keys.max.nil? ? 0 : settings.urls.keys.max
       new_id = max_id + 1
       settings.urls[new_id] = url_to_shorten
 
       redirect to("/#{new_id}?stats=true")
-    else
-      erb :index, locals:{error: 'The text you entered is not a valid URL', url_to_shorten: url_to_shorten}
     end
   end
 

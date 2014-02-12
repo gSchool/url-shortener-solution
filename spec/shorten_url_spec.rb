@@ -36,4 +36,12 @@ feature 'URL shortening' do
 
     expect(page).to have_content 'The text you entered is not a valid URL'
   end
+
+  scenario 'Reports an error when user tries to shorten a blank url' do
+    visit '/'
+
+    click_on 'Shorten'
+
+    expect(page).to have_content 'URL can not be blank'
+  end
 end
