@@ -20,4 +20,20 @@ feature 'URL shortening' do
 
     expect(current_url).to eq 'http://livingsocial.com/'
   end
+
+  scenario 'Reports an error when user tries to shorten a non-url' do
+    visit '/'
+
+    fill_in 'url_to_shorten', with: 'not a url'
+    click_on 'Shorten'
+
+    expect(page).to have_content 'The text you entered is not a valid URL'
+
+    visit '/'
+
+    fill_in 'url_to_shorten', with: 'asdfasdfasdfasdf'
+    click_on 'Shorten'
+
+    expect(page).to have_content 'The text you entered is not a valid URL'
+  end
 end
