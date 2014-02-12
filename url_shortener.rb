@@ -6,7 +6,7 @@ class UrlShortener < Sinatra::Application
   set :urls, {}
 
   get '/' do
-    erb :index, locals:{error: ''}
+    erb :index, locals:{error: '', url_to_shorten: ''}
   end
 
   post '/shortened_url' do
@@ -19,7 +19,7 @@ class UrlShortener < Sinatra::Application
 
       redirect to("/#{new_id}?stats=true")
     else
-      erb :index, locals:{error: 'The text you entered is not a valid URL'}
+      erb :index, locals:{error: 'The text you entered is not a valid URL', url_to_shorten: url_to_shorten}
     end
   end
 
