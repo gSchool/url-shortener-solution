@@ -19,7 +19,7 @@ class UrlShortener < Sinatra::Application
     else
       max_id = settings.urls.keys.max.nil? ? 0 : settings.urls.keys.max
       new_id = max_id + 1
-      settings.urls[new_id] = url_to_shorten
+      settings.urls[new_id] = {original_url: url_to_shorten, visits: 0}
 
       redirect to("/#{new_id}?stats=true")
     end
@@ -28,13 +28,16 @@ class UrlShortener < Sinatra::Application
   get '/:id' do
     show_stats = params['stats'] == 'true'
     id = params['id'].to_i
-    original_url = settings.urls[id]
+    original_url = settings.urls[id][:original_url]
+    total_visits = settings.urls[id][:visits]
 
     if show_stats
       shortened_url = "#{request.scheme}://#{request.host}:#{request.port}/#{id}"
 
-      erb :show_shortened_url, locals:{shortened_url: shortened_url, original_url: original_url}
+      erb :show_shortened_url, locals:{shortened_url: shortened_url, original_url: original_url, total_visits: total_visits}
     else
+      previous_visits = settings.urls[id][:visits]
+      settings.urls[id] = {original_url: original_url, visits: previous_visits + 1}
       redirect to(original_url)
     end
   end
