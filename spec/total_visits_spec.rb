@@ -11,11 +11,9 @@ feature 'Total visits' do
     fill_in 'url_to_shorten', with: 'http://livingsocial.com'
     click_on 'Shorten'
 
-    id_of_created_url = current_path.gsub('/','')
-
     expect(page).to have_text :visible, 'Total visits: 0'
 
-    visit "/#{id_of_created_url}"
+    visit "/#{id_of_created_url(current_path)}"
 
     visit '/1?stats=true'
 

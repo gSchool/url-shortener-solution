@@ -11,14 +11,12 @@ feature 'URL shortening' do
     fill_in 'url_to_shorten', with: 'http://livingsocial.com'
     click_on 'Shorten'
 
-    id_of_created_url = current_path.gsub('/','')
-
     expect(page).to have_content 'Original URL'
     expect(page).to have_content 'http://livingsocial.com'
     expect(page).to have_content '"Shortened" URL'
-    expect(page).to have_content "http://www.example.com:80/#{id_of_created_url}"
+    expect(page).to have_content "http://www.example.com:80/#{id_of_created_url(current_path)}"
 
-    visit "/#{id_of_created_url}"
+    visit "/#{id_of_created_url(current_path)}"
 
     expect(current_url).to eq 'http://livingsocial.com/'
   end
