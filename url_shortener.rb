@@ -19,10 +19,16 @@ class UrlShortener < Sinatra::Application
   end
 
   get '/:id' do
+    show_stats = params['stats'] == 'true'
     id = params['id'].to_i
     original_url = settings.urls[id]
-    shortened_url = "#{request.scheme}://#{request.host}:#{request.port}/#{id}"
 
-    erb :show_shortened_url, locals:{shortened_url: shortened_url, original_url: original_url}
+    if show_stats
+      shortened_url = "#{request.scheme}://#{request.host}:#{request.port}/#{id}"
+
+      erb :show_shortened_url, locals:{shortened_url: shortened_url, original_url: original_url}
+    else
+      redirect to(original_url)
+    end
   end
 end

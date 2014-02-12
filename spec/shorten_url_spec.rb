@@ -15,5 +15,9 @@ feature 'URL shortening' do
     expect(page).to have_content 'http://livingsocial.com'
     expect(page).to have_content '"Shortened" URL'
     expect(page).to have_content 'http://www.example.com:80/1'
+
+    visit '/1'
+
+    expect(current_url).to eq 'http://livingsocial.com/'
   end
 end
