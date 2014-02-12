@@ -5,7 +5,22 @@ body {
     margin: 0px auto;
 }
 
+table {
+    font-size: inherit;
+    width: 100%;
+}
+
+td {
+    padding: .25em 0;
+}
+
 form {
+    width: 50%;
+    margin: 0 auto;
+    margin-top: 20em;
+}
+
+.content {
     width: 50%;
     margin: 0 auto;
     margin-top: 20em;
