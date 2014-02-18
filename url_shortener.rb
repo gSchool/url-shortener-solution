@@ -27,9 +27,7 @@ class UrlShortener < Sinatra::Application
     url = Urls.find(id)
 
     if show_stats
-      shortened_url = "#{request.scheme}://#{request.host}:#{request.port}/#{id}"
-
-      erb :show_shortened_url, locals:{shortened_url: shortened_url, url: url}
+      erb :show_shortened_url, locals:{shortened_url: shortened_url(request, url), url: url}
     else
       previous_visits = url.visits
       Urls.update(id, visits: previous_visits + 1)
@@ -47,5 +45,9 @@ class UrlShortener < Sinatra::Application
     rescue URI::InvalidURIError
       false
     end
+  end
+
+  def shortened_url(request, url)
+    "#{request.scheme}://#{request.host}:#{request.port}/#{url.id}"
   end
 end

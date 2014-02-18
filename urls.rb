@@ -5,7 +5,7 @@ class Urls
   def self.create(url_to_shorten)
     max_id = @urls.keys.max.nil? ? 0 : @urls.keys.max
     new_id = max_id + 1
-    @urls[new_id] = Url.new(url_to_shorten, 0)
+    @urls[new_id] = Url.new(new_id, url_to_shorten, 0)
     new_id
   end
 
