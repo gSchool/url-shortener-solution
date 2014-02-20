@@ -1,22 +1,18 @@
 require './url'
 
 class Urls
-  @urls = {}
+  @urls = DB[:urls]
+
   def self.create(url_to_shorten)
-    max_id = @urls.keys.max.nil? ? 0 : @urls.keys.max
-    new_id = max_id + 1
-    @urls[new_id] = Url.new(new_id, url_to_shorten, 0)
-    new_id
+    @urls.insert(original_url: url_to_shorten)
   end
 
   def self.find(id)
-    @urls[id]
+    url = @urls.where(id: id).first
+    Url.new(id, url[:original_url], url[:visits])
   end
 
   def self.update(id, new_attributes)
-    url = find(id)
-    new_attributes.each do |attribute, value|
-      url.send("#{attribute}=", value)
-    end
+    @urls.where(id: id).update(new_attributes)
   end
 end

@@ -13,9 +13,11 @@ feature 'Total visits' do
 
     expect(page).to have_text :visible, 'Total visits: 0'
 
-    visit "/#{id_of_created_url(current_path)}"
+    new_id = id_of_created_url(current_path)
 
-    visit '/1?stats=true'
+    visit "/#{new_id}"
+
+    visit "/#{new_id}?stats=true"
 
     expect(page).to have_text :visible, 'Total visits: 1'
   end
