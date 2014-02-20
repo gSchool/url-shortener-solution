@@ -9,7 +9,11 @@ class Urls
 
   def self.find(id)
     url = @urls.where(id: id).first
-    Url.new(id, url[:original_url], url[:visits])
+    if !url.nil?
+      Url.new(id, url[:original_url], url[:visits])
+    else
+      nil
+    end
   end
 
   def self.update(id, new_attributes)
