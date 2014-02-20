@@ -8,3 +8,8 @@
 1. `rerun rackup`
     * running rerun will reload app when file changes are detected
 1. Run tests using `rspec spec`.
+
+## Migrations on Heroku
+
+To run the migrations on heroku, run `heroku run 'sequel -m migrations $HEROKU_POSTGRESQL_TEAL_URL' --app gschool-url-shortener-staging`
+or `heroku run 'sequel -m migrations $HEROKU_POSTGRESQL_TEAL_URL' --app gschool-url-shortener-prod`
