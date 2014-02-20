@@ -4,6 +4,10 @@ require './urls'
 class UrlShortener < Sinatra::Application
   set :public_folder, './public'
 
+  get '/favicon.ico' do
+    # This is here so /favicon.ico doesn't match the /:id route
+  end
+
   get '/' do
     erb :index, locals:{error: '', url_to_shorten: ''}
   end
