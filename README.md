@@ -12,4 +12,4 @@
 ## Migrations on Heroku
 
 To run the migrations on heroku, run `heroku run 'sequel -m migrations $HEROKU_POSTGRESQL_TEAL_URL' --app gschool-url-shortener-staging`
-or `heroku run 'sequel -m migrations $HEROKU_POSTGRESQL_TEAL_URL' --app gschool-url-shortener-prod`
+or `heroku run 'sequel -m migrations HEROKU_POSTGRESQL_AQUA_URL' --app gschool-url-shortener-prod`
