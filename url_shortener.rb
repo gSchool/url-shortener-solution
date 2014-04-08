@@ -3,23 +3,31 @@ require './urls'
 
 class UrlShortener < Sinatra::Application
   set :public_folder, './public'
+  set :error => ''
+  set :url_to_shorten => ''
 
   get '/favicon.ico' do
     # This is here so /favicon.ico doesn't match the /:id route
   end
 
   get '/' do
-    erb :index, locals:{error: '', url_to_shorten: ''}
+    erb :index, locals:{error: settings.error, url_to_shorten: settings.url_to_shorten}
   end
 
   post '/shortened_url' do
     url_to_shorten = params['url_to_shorten']
 
     if url_to_shorten.empty?
-      erb :index, locals:{error: 'URL can not be blank', url_to_shorten: url_to_shorten}
+      settings.error = 'URL can not be blank'
+      settings.url_to_shorten = url_to_shorten
+      redirect '/'
     elsif !is_url?(url_to_shorten)
-      erb :index, locals:{error: 'The text you entered is not a valid URL', url_to_shorten: url_to_shorten}
+      settings.error = 'The text you entered is not a valid URL'
+      settings.url_to_shorten = url_to_shorten
+      redirect '/'
     else
+      settings.error = ''
+      settings.url_to_shorten = ''
       new_id = Urls.create(url_to_shorten)
       redirect to("/#{new_id}?stats=true")
     end
@@ -52,6 +60,6 @@ class UrlShortener < Sinatra::Application
   end
 
   def shortened_url(request, url)
-    "#{request.scheme}://#{request.host}:#{request.port}/#{url.id}"
+    "#{request.base_url}/#{url.id}"
   end
 end
