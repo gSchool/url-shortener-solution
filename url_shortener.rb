@@ -1,7 +1,12 @@
 require 'sinatra/base'
-require './urls'
+require './url_repository'
 
 class UrlShortener < Sinatra::Application
+
+  def initialize(app=nil)
+    super(app)
+    @url_repository = UrlRepository.new(DB)
+  end
   set :public_folder, './public'
 
   get '/favicon.ico' do
@@ -20,7 +25,7 @@ class UrlShortener < Sinatra::Application
     elsif !is_url?(url_to_shorten)
       erb :index, locals:{error: 'The text you entered is not a valid URL', url_to_shorten: url_to_shorten}
     else
-      new_id = Urls.create(url_to_shorten)
+      new_id = @url_repository.create(url_to_shorten)
       redirect to("/#{new_id}?stats=true")
     end
   end
@@ -28,13 +33,13 @@ class UrlShortener < Sinatra::Application
   get '/:id' do
     show_stats = params['stats'] == 'true'
     id = params['id'].to_i
-    url = Urls.find(id)
+    url = @url_repository.find(id)
 
     if show_stats
       erb :show_shortened_url, locals:{shortened_url: shortened_url(request, url), url: url}
     else
       previous_visits = url.visits
-      Urls.update(id, visits: previous_visits + 1)
+      @url_repository.update(id, visits: previous_visits + 1)
       redirect to(url.original_url)
     end
   end
