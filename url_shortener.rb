@@ -57,6 +57,6 @@ class UrlShortener < Sinatra::Application
   end
 
   def shortened_url(request, url)
-    "#{request.scheme}://#{request.host}:#{request.port}/#{url.id}"
+    "#{request.base_url}/#{url.id}"
   end
 end
